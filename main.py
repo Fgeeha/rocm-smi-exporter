@@ -228,7 +228,7 @@ if __name__ == "__main__":
 
     rsmi_ver, rlib_ver = _get_versions()
     driver_version = ""  # из блока 'system' ниже заполним при первом проходе
-    # Раз в 10 секунд обновляем метрики
+    # Раз в 1 секунду обновляем метрики
     while True:
         data = getGPUMetrics()
 
@@ -430,4 +430,4 @@ if __name__ == "__main__":
             )
 
         logger.info("[X] Refreshed GPU metrics.")
-        time.sleep(10)
+        time.sleep(1)
