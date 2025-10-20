@@ -221,6 +221,31 @@ def getGPUMetrics():
     return metrics
 
 
+def getRocmVersion():
+    try:
+        # Запускаем rocm-smi с флагом -V (версия)
+        result = check_output(["rocm-smi", "-V"], universal_newlines=True)
+
+        # Парсим вывод
+        lines = result.strip().split("\n")
+        version_info = {}
+
+        for line in lines:
+            if "ROCM-SMI version:" in line:
+                version_info["rocm_smi_version"] = line.split(":")[-1].strip()
+            elif "ROCM-SMI-LIB version:" in line:
+                version_info["rocm_smi_lib_version"] = line.split(":")[
+                    -1
+                ].strip()
+
+        logger.info(f"[X] Retrieved ROCm version: {version_info}")
+        return version_info
+
+    except Exception as e:
+        logger.error(f"[!] Failed to get ROCm version: {e}")
+        return None
+
+
 # ========== Main ==========
 if __name__ == "__main__":
     start_http_server(PORT_L)
