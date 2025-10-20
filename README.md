@@ -51,7 +51,7 @@ scrape_configs:
 # Existing configuration
   - job_name: "rocm-smi-exporter"
     static_configs:
-      - targets: ["localhost:9393"]
+      - targets: ["localhost:9101"]
 ```
 
 ## Build instructions
