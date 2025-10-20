@@ -49,9 +49,19 @@ Also, don't forget to add a rule for scraping the exporter from Prometheus:
 ```yaml
 scrape_configs:
 # Existing configuration
-  - job_name: "rocm-smi-exporter"
-    static_configs:
-      - targets: ["localhost:9101"]
+  # === AMD ROCm SMI exporter ===
+- job_name: rocm_smi_exporter
+  # Экспортер обновляет метрики каждые ~10s
+  scrape_interval: 1s
+  scrape_timeout: 5s
+  metrics_path: /metrics
+  static_configs:
+    - targets:
+      - gpu-use.local:9101          # VM/хост, где крутится твой exporter
+      # - any.local:9101
+      labels:
+        role: gpu
+        vendor: amd
 ```
 
 ## Build instructions
