@@ -1,851 +1,470 @@
 {
-    "annotations": {
-      "list": [
-        {
-          "builtIn": 1,
-          "datasource": {
-            "type": "grafana",
-            "uid": "-- Grafana --"
-          },
-          "enable": true,
-          "hide": true,
-          "iconColor": "rgba(0, 211, 255, 1)",
-          "name": "Annotations & Alerts",
-          "type": "dashboard"
-        }
-      ]
-    },
-    "editable": true,
-    "fiscalYearStartMonth": 0,
-    "graphTooltip": 0,
-    "id": 13,
-    "links": [],
-    "panels": [
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    { "type": "grafana", "id": "grafana", "name": "Grafana", "version": "10.0.0" },
+    { "type": "panel", "id": "timeseries", "name": "Time series", "version": "" },
+    { "type": "panel", "id": "table", "name": "Table", "version": "" },
+    { "type": "panel", "id": "gauge", "name": "Gauge", "version": "" },
+    { "type": "panel", "id": "row", "name": "Row", "version": "" },
+    { "type": "datasource", "id": "prometheus", "name": "Prometheus", "version": "2.0.0" }
+  ],
+  "annotations": {
+    "list": [
       {
-        "collapsed": false,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 0
-        },
-        "id": 6,
-        "panels": [],
-        "title": "Real-time Metrics",
-        "type": "row"
-      },
-      {
-        "datasource": {
-          "default": false,
-          "type": "prometheus",
-          "uid": "adwys22fbh2wwe"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "max": 80,
-            "min": 10,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "dark-green",
-                  "value": 10
-                },
-                {
-                  "color": "#EAB839",
-                  "value": 40
-                },
-                {
-                  "color": "dark-orange",
-                  "value": 60
-                },
-                {
-                  "color": "dark-red",
-                  "value": 70
-                }
-              ]
-            },
-            "unit": "celsius"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 6,
-          "w": 5,
-          "x": 0,
-          "y": 1
-        },
-        "id": 1,
-        "options": {
-          "minVizHeight": 75,
-          "minVizWidth": 75,
-          "orientation": "auto",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showThresholdLabels": false,
-          "showThresholdMarkers": true,
-          "sizing": "auto"
-        },
-        "pluginVersion": "11.2.0",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "adwys22fbh2wwe"
-            },
-            "disableTextWrap": false,
-            "editorMode": "builder",
-            "expr": "rocm_smi_edge_temperature{device_id=\"$device_id\", device_name=\"$device_name\"}",
-            "fullMetaSearch": false,
-            "includeNullMetadata": true,
-            "instant": false,
-            "legendFormat": "__auto",
-            "range": true,
-            "refId": "A",
-            "useBackend": false
-          }
-        ],
-        "title": "Edge Temperature",
-        "type": "gauge"
-      },
-      {
-        "datasource": {
-          "default": false,
-          "type": "prometheus",
-          "uid": "adwys22fbh2wwe"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "max": 80,
-            "min": 10,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 60
-                }
-              ]
-            },
-            "unit": "watt"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 6,
-          "w": 5,
-          "x": 6,
-          "y": 1
-        },
-        "id": 2,
-        "options": {
-          "minVizHeight": 75,
-          "minVizWidth": 75,
-          "orientation": "auto",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showThresholdLabels": false,
-          "showThresholdMarkers": true,
-          "sizing": "auto"
-        },
-        "pluginVersion": "11.2.0",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "adwys22fbh2wwe"
-            },
-            "disableTextWrap": false,
-            "editorMode": "builder",
-            "expr": "rocm_smi_socket_power{device_id=\"$device_id\", device_name=\"$device_name\"}",
-            "fullMetaSearch": false,
-            "includeNullMetadata": true,
-            "instant": false,
-            "legendFormat": "__auto",
-            "range": true,
-            "refId": "A",
-            "useBackend": false
-          }
-        ],
-        "title": "Socket Power Consumption",
-        "type": "gauge"
-      },
-      {
-        "datasource": {
-          "default": false,
-          "type": "prometheus",
-          "uid": "adwys22fbh2wwe"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "yellow",
-                  "value": 40
-                },
-                {
-                  "color": "orange",
-                  "value": 60
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "percent"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 6,
-          "w": 5,
-          "x": 13,
-          "y": 1
-        },
-        "id": 3,
-        "options": {
-          "minVizHeight": 75,
-          "minVizWidth": 75,
-          "orientation": "auto",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showThresholdLabels": false,
-          "showThresholdMarkers": true,
-          "sizing": "auto"
-        },
-        "pluginVersion": "11.2.0",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "adwys22fbh2wwe"
-            },
-            "disableTextWrap": false,
-            "editorMode": "builder",
-            "expr": "rocm_smi_gpu_usage{device_id=\"$device_id\", device_name=\"$device_name\"}",
-            "fullMetaSearch": false,
-            "includeNullMetadata": true,
-            "instant": false,
-            "legendFormat": "__auto",
-            "range": true,
-            "refId": "A",
-            "useBackend": false
-          }
-        ],
-        "title": "GPU Usage",
-        "type": "gauge"
-      },
-      {
-        "datasource": {
-          "default": false,
-          "type": "prometheus",
-          "uid": "adwys22fbh2wwe"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "#EAB839",
-                  "value": 60
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "percent"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 6,
-          "w": 5,
-          "x": 19,
-          "y": 1
-        },
-        "id": 4,
-        "options": {
-          "minVizHeight": 75,
-          "minVizWidth": 75,
-          "orientation": "auto",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showThresholdLabels": false,
-          "showThresholdMarkers": true,
-          "sizing": "auto"
-        },
-        "pluginVersion": "11.2.0",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "adwys22fbh2wwe"
-            },
-            "disableTextWrap": false,
-            "editorMode": "builder",
-            "expr": "rocm_smi_gpu_vram_allocation{device_id=\"$device_id\", device_name=\"$device_name\"}",
-            "fullMetaSearch": false,
-            "includeNullMetadata": true,
-            "instant": false,
-            "legendFormat": "__auto",
-            "range": true,
-            "refId": "A",
-            "useBackend": false
-          }
-        ],
-        "title": "VRAM Allocation",
-        "type": "gauge"
-      },
-      {
-        "collapsed": true,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 7
-        },
-        "id": 7,
-        "panels": [],
-        "title": "Historical Metrics",
-        "type": "row"
-      },
-      {
-        "datasource": {
-          "default": false,
-          "type": "prometheus",
-          "uid": "adwys22fbh2wwe"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "celsius"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 9,
-          "w": 12,
-          "x": 0,
-          "y": 8
-        },
-        "id": 5,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "adwys22fbh2wwe"
-            },
-            "disableTextWrap": false,
-            "editorMode": "builder",
-            "expr": "rocm_smi_edge_temperature{device_id=\"$device_id\", device_name=\"$device_name\"}",
-            "fullMetaSearch": false,
-            "includeNullMetadata": true,
-            "instant": false,
-            "legendFormat": "Edge Temperature",
-            "range": true,
-            "refId": "A",
-            "useBackend": false
-          }
-        ],
-        "title": "Edge Temperature",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "default": false,
-          "type": "prometheus",
-          "uid": "adwys22fbh2wwe"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "watt"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 9,
-          "w": 12,
-          "x": 12,
-          "y": 8
-        },
-        "id": 8,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "adwys22fbh2wwe"
-            },
-            "disableTextWrap": false,
-            "editorMode": "builder",
-            "expr": "rocm_smi_socket_power{device_id=\"$device_id\", device_name=\"$device_name\"}",
-            "fullMetaSearch": false,
-            "includeNullMetadata": true,
-            "instant": false,
-            "legendFormat": "Edge Temperature",
-            "range": true,
-            "refId": "A",
-            "useBackend": false
-          }
-        ],
-        "title": "Socket Power Consumption",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "default": false,
-          "type": "prometheus",
-          "uid": "adwys22fbh2wwe"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "celsius"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 9,
-          "w": 12,
-          "x": 0,
-          "y": 17
-        },
-        "id": 9,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "adwys22fbh2wwe"
-            },
-            "disableTextWrap": false,
-            "editorMode": "builder",
-            "expr": "rocm_smi_gpu_usage{device_id=\"$device_id\", device_name=\"$device_name\"}",
-            "fullMetaSearch": false,
-            "includeNullMetadata": true,
-            "instant": false,
-            "legendFormat": "Edge Temperature",
-            "range": true,
-            "refId": "A",
-            "useBackend": false
-          }
-        ],
-        "title": "GPU Usage",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "default": false,
-          "type": "prometheus",
-          "uid": "adwys22fbh2wwe"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "celsius"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 9,
-          "w": 12,
-          "x": 12,
-          "y": 17
-        },
-        "id": 10,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "adwys22fbh2wwe"
-            },
-            "disableTextWrap": false,
-            "editorMode": "builder",
-            "expr": "rocm_smi_gpu_vram_allocation{device_id=\"$device_id\", device_name=\"$device_name\"}",
-            "fullMetaSearch": false,
-            "includeNullMetadata": true,
-            "instant": false,
-            "legendFormat": "Edge Temperature",
-            "range": true,
-            "refId": "A",
-            "useBackend": false
-          }
-        ],
-        "title": "VRAM Allocation",
-        "type": "timeseries"
+        "builtIn": 1,
+        "datasource": { "type": "grafana", "uid": "-- Grafana --" },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
       }
-    ],
-    "schemaVersion": 39,
-    "tags": [],
-    "templating": {
-      "list": [
+    ]
+  },
+  "editable": true,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "type": "row",
+      "title": "Real-time Metrics",
+      "id": 100,
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 1 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "type": "gauge",
+      "title": "Edge Temperature",
+      "id": 101,
+      "gridPos": { "x": 0, "y": 1, "w": 6, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
         {
-          "current": {
-            "selected": false,
-            "text": "0x15bf",
-            "value": "0x15bf"
-          },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "adwys22fbh2wwe"
-          },
-          "definition": "label_values(rocm_smi_edge_temperature,device_id)",
-          "hide": 0,
-          "includeAll": false,
-          "label": "Device ID",
-          "multi": false,
-          "name": "device_id",
-          "options": [],
-          "query": {
-            "qryType": 1,
-            "query": "label_values(rocm_smi_edge_temperature,device_id)",
-            "refId": "PrometheusVariableQueryEditor-VariableQuery"
-          },
-          "refresh": 1,
-          "regex": "",
-          "skipUrlSync": false,
-          "sort": 0,
-          "type": "query"
-        },
-        {
-          "current": {
-            "selected": true,
-            "text": "Phoenix1",
-            "value": "Phoenix1"
-          },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "adwys22fbh2wwe"
-          },
-          "definition": "label_values(rocm_smi_edge_temperature,device_name)",
-          "hide": 0,
-          "includeAll": false,
-          "label": "Device Name",
-          "multi": false,
-          "name": "device_name",
-          "options": [],
-          "query": {
-            "qryType": 1,
-            "query": "label_values(rocm_smi_edge_temperature,device_name)",
-            "refId": "PrometheusVariableQueryEditor-VariableQuery"
-          },
-          "refresh": 1,
-          "regex": "",
-          "skipUrlSync": false,
-          "sort": 0,
-          "type": "query"
+          "expr": "rocm_smi_edge_temperature_celsius{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}",
+          "refId": "A",
+          "legendFormat": "{{device_name}}"
         }
-      ]
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "min": 0,
+          "max": 110,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 70 },
+              { "color": "red", "value": 85 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      }
     },
-    "time": {
-      "from": "now-1h",
-      "to": "now"
+    {
+      "type": "gauge",
+      "title": "Socket Power Consumption",
+      "id": 102,
+      "gridPos": { "x": 6, "y": 1, "w": 6, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "(rocm_smi_socket_power_watts{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}) or (rocm_smi_socket_power_average_watts{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}) or (rocm_smi_gfx_package_power_average_watts{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"})",
+          "refId": "A",
+          "legendFormat": "{{device_name}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "watt",
+          "min": 0,
+          "max": 300,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 180 },
+              { "color": "red", "value": 230 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      }
     },
-    "timepicker": {},
-    "timezone": "browser",
-    "title": "ROCm GPU Metrics",
-    "uid": "ddwzezdn3pgqoc",
-    "version": 10,
-    "weekStart": ""
-  }
+    {
+      "type": "gauge",
+      "title": "GPU Usage",
+      "id": 103,
+      "gridPos": { "x": 12, "y": 1, "w": 6, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "rocm_smi_gpu_usage_percent{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}",
+          "refId": "A",
+          "legendFormat": "{{device_name}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 60 },
+              { "color": "red", "value": 85 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      }
+    },
+    {
+      "type": "gauge",
+      "title": "VRAM Allocation",
+      "id": 104,
+      "gridPos": { "x": 18, "y": 1, "w": 6, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "rocm_smi_vram_allocation_percent{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}",
+          "refId": "A",
+          "legendFormat": "{{device_name}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 70 },
+              { "color": "red", "value": 90 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      }
+    },
+
+    {
+      "type": "row",
+      "title": "Info",
+      "id": 105,
+      "gridPos": { "x": 0, "y": 9, "w": 24, "h": 1 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "type": "table",
+      "title": "Software Versions",
+      "id": 1,
+      "gridPos": { "x": 0, "y": 10, "w": 12, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "pluginVersion": "10.0.0",
+      "targets": [
+        { "expr": "rocm_smi_software_info", "legendFormat": "{{driver_version}} / {{rocm_smi_version}} / {{rocm_smi_lib_version}}", "refId": "A" }
+      ],
+      "options": { "showHeader": true, "frameIndex": 0 },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": { "Time": true, "Value": true },
+            "renameByName": {
+              "driver_version": "Driver",
+              "rocm_smi_version": "rocm-smi",
+              "rocm_smi_lib_version": "rocm-smi-lib"
+            }
+          }
+        }
+      ],
+      "fieldConfig": { "defaults": { "custom": { "align": "auto" } }, "overrides": [] }
+    },
+    {
+      "type": "table",
+      "title": "Device Info",
+      "id": 2,
+      "gridPos": { "x": 12, "y": 10, "w": 12, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "rocm_smi_device_info{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}",
+          "refId": "A"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": { "Time": true, "Value": true },
+            "renameByName": {
+              "device_name": "Device Name",
+              "device_id": "Device ID",
+              "subsystem_id": "Subsystem ID",
+              "vbios": "VBIOS",
+              "gfx_version": "GFX",
+              "card_series": "Series",
+              "card_vendor": "Vendor",
+              "job": "job",
+              "instance": "instance"
+            }
+          }
+        }
+      ],
+      "options": { "showHeader": true },
+      "fieldConfig": { "defaults": { "custom": { "align": "auto" } }, "overrides": [] }
+    },
+
+    {
+      "type": "row",
+      "title": "Historical Metrics",
+      "id": 106,
+      "gridPos": { "x": 0, "y": 16, "w": 24, "h": 1 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "type": "timeseries",
+      "title": "Temperatures (°C): Edge/Hotspot/Mem",
+      "id": 3,
+      "gridPos": { "x": 0, "y": 17, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "unit": "celsius" }, "overrides": [] },
+      "targets": [
+        { "expr": "rocm_smi_edge_temperature_celsius{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "edge - {{device_name}}", "refId": "A" },
+        { "expr": "rocm_smi_hotspot_temperature_celsius{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "hotspot - {{device_name}}", "refId": "B" },
+        { "expr": "rocm_smi_memory_temperature_celsius{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "mem - {{device_name}}", "refId": "C" }
+      ],
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } }
+    },
+    {
+      "type": "timeseries",
+      "title": "Power (W): Socket Current / Socket Avg / GFX Pkg Avg / GFX Pkg Max",
+      "id": 4,
+      "gridPos": { "x": 12, "y": 17, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "unit": "watt" }, "overrides": [] },
+      "targets": [
+        { "expr": "rocm_smi_socket_power_watts{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "socket current - {{device_name}}", "refId": "A" },
+        { "expr": "rocm_smi_socket_power_average_watts{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "socket avg - {{device_name}}", "refId": "B" },
+        { "expr": "rocm_smi_gfx_package_power_average_watts{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "gfx pkg avg - {{device_name}}", "refId": "C" },
+        { "expr": "rocm_smi_gfx_package_power_max_watts{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "gfx pkg max - {{device_name}}", "refId": "D" }
+      ],
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } }
+    },
+    {
+      "type": "timeseries",
+      "title": "Utilization (%) — GPU / VRAM / UMC / MM",
+      "id": 5,
+      "gridPos": { "x": 0, "y": 25, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "targets": [
+        { "expr": "rocm_smi_gpu_usage_percent{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "GPU - {{device_name}}", "refId": "A" },
+        { "expr": "rocm_smi_vram_allocation_percent{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "VRAM - {{device_name}}", "refId": "B" },
+        { "expr": "rocm_smi_umc_activity_percent{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "UMC - {{device_name}}", "refId": "C" },
+        { "expr": "rocm_smi_mm_activity_percent{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "MM - {{device_name}}", "refId": "D" }
+      ],
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } }
+    },
+    {
+      "type": "timeseries",
+      "title": "Clocks Current (MHz) — by clock label",
+      "id": 6,
+      "gridPos": { "x": 12, "y": 25, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        { "expr": "rocm_smi_clock_current_mhz{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "{{clock}} - {{device_name}}", "refId": "A" }
+      ],
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "fieldConfig": { "defaults": { "unit": "none" }, "overrides": [] }
+    },
+    {
+      "type": "timeseries",
+      "title": "Clocks Average (MHz) — by clock label",
+      "id": 7,
+      "gridPos": { "x": 0, "y": 33, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        { "expr": "rocm_smi_clock_average_mhz{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "{{clock}} avg - {{device_name}}", "refId": "A" }
+      ],
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "fieldConfig": { "defaults": { "unit": "none" }, "overrides": [] }
+    },
+    {
+      "type": "timeseries",
+      "title": "PCIe Link Speed (GT/s)",
+      "id": 8,
+      "gridPos": { "x": 12, "y": 33, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        { "expr": "rocm_smi_pcie_link_speed_gtps{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "GT/s - {{device_name}}", "refId": "A" }
+      ],
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "fieldConfig": { "defaults": { "unit": "none" }, "overrides": [] }
+    },
+    {
+      "type": "timeseries",
+      "title": "PCIe Link Width (lanes)",
+      "id": 9,
+      "gridPos": { "x": 0, "y": 41, "w": 12, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        { "expr": "rocm_smi_pcie_link_width_lanes{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "lanes - {{device_name}}", "refId": "A" }
+      ],
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "fieldConfig": { "defaults": { "unit": "none" }, "overrides": [] }
+    },
+    {
+      "type": "timeseries",
+      "title": "Voltages (mV) — by rail",
+      "id": 10,
+      "gridPos": { "x": 12, "y": 41, "w": 12, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        { "expr": "rocm_smi_voltage_millivolt{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "{{rail}} - {{device_name}}", "refId": "A" }
+      ],
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "fieldConfig": { "defaults": { "unit": "volt", "decimals": 0 }, "overrides": [] }
+    },
+    {
+      "type": "timeseries",
+      "title": "Fan Speed (RPM)",
+      "id": 11,
+      "gridPos": { "x": 0, "y": 47, "w": 12, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        { "expr": "rocm_smi_fan_speed_rpm{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "fan - {{device_name}}", "refId": "A" }
+      ],
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "fieldConfig": { "defaults": { "unit": "rpm" }, "overrides": [] }
+    },
+    {
+      "type": "timeseries",
+      "title": "Energy Accumulator (µJ) / Accumulated Energy (µJ)",
+      "id": 12,
+      "gridPos": { "x": 12, "y": 47, "w": 12, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        { "expr": "rocm_smi_energy_accumulator_uj{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "accumulator - {{device_name}}", "refId": "A" },
+        { "expr": "rocm_smi_accumulated_energy_uj{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}", "legendFormat": "accumulated - {{device_name}}", "refId": "B" }
+      ],
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "fieldConfig": { "defaults": { "unit": "none" }, "overrides": [] }
+    },
+    {
+      "type": "timeseries",
+      "title": "Computed Power from Energy (W) — rate(accumulated_uj)/1e6",
+      "id": 13,
+      "gridPos": { "x": 0, "y": 53, "w": 24, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        { "expr": "rate(rocm_smi_accumulated_energy_uj{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}[$__rate_interval]) / 1e6", "legendFormat": "from energy - {{device_name}}", "refId": "A" }
+      ],
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "fieldConfig": { "defaults": { "unit": "watt" }, "overrides": [] }
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": ["rocm", "amd", "gpu", "exporter"],
+  "templating": {
+    "list": [
+      {
+        "name": "job",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+        "query": "label_values(rocm_smi_device_info, job)",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true,
+        "allValue": ".*"
+      },
+      {
+        "name": "instance",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+        "query": "label_values(rocm_smi_device_info{job=~\"$job\"}, instance)",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true,
+        "allValue": ".*"
+      },
+      {
+        "name": "device_name",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+        "query": "label_values(rocm_smi_device_info{job=~\"$job\",instance=~\"$instance\"}, device_name)",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true,
+        "allValue": ".*"
+      },
+      {
+        "name": "device_id",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+        "query": "label_values(rocm_smi_device_info{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\"}, device_id)",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true,
+        "allValue": ".*"
+      },
+      {
+        "name": "subsystem_id",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+        "query": "label_values(rocm_smi_device_info{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\"}, subsystem_id)",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true,
+        "allValue": ".*"
+      }
+    ]
+  },
+  "time": { "from": "now-24h", "to": "now" },
+  "title": "AMD ROCm SMI Exporter",
+  "uid": null,
+  "version": 2
+}
