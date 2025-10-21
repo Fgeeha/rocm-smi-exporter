@@ -14,7 +14,6 @@ from prometheus_client import (
 
 PORT_L = 9101
 
-
 logger = logging.getLogger("rocm_smi_exporter")
 handler = logging.StreamHandler()
 handler.setFormatter(
@@ -23,18 +22,18 @@ handler.setFormatter(
 logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
-# Отключаем дефолтные метрики Python, чтобы не шумели
+# отключаем дефолтные python-метрики
 try:
     REGISTRY.unregister(PROCESS_COLLECTOR)
     REGISTRY.unregister(PLATFORM_COLLECTOR)
-    # gc может называться по-разному в версиях lib; не критично, если не найдём.
-    gc_name = "python_gc_objects_collected_total"
-    if gc_name in REGISTRY._names_to_collectors:
-        REGISTRY.unregister(REGISTRY._names_to_collectors[gc_name])
-except Exception as e:
-    logger.debug(f"Skip unregister defaults: {e}")
+    if "python_gc_objects_collected_total" in REGISTRY._names_to_collectors:
+        REGISTRY.unregister(
+            REGISTRY._names_to_collectors["python_gc_objects_collected_total"]
+        )
+except Exception:
+    pass
 
-# ========= Prometheus Gauges =========
+# ===== Gauges (как у тебя) =====
 gpuEdgeTemperature = Gauge(
     "rocm_smi_edge_temperature_celsius",
     "Edge temperature (°C)",
@@ -97,7 +96,7 @@ voltageMilliV = Gauge(
     "rocm_smi_voltage_millivolt",
     "Voltage (mV)",
     ["device_name", "device_id", "subsystem_id", "rail"],
-)  # rail: soc/gfx/mem
+)
 fanRpm = Gauge(
     "rocm_smi_fan_speed_rpm",
     "Fan speed (RPM)",
@@ -108,7 +107,7 @@ clkCurrentMHz = Gauge(
     "rocm_smi_clock_current_mhz",
     "Current clock (MHz)",
     ["device_name", "device_id", "subsystem_id", "clock"],
-)  # clock: gfxclk/socclk/uclk/vclk0/dclk0
+)
 clkAverageMHz = Gauge(
     "rocm_smi_clock_average_mhz",
     "Average clock (MHz)",
@@ -137,7 +136,6 @@ accumulatedEnergyUJ = Gauge(
     ["device_name", "device_id", "subsystem_id"],
 )
 
-# Информация о девайсе и версиях как gauge=1 с лейблами (info-метрика)
 deviceInfo = Gauge(
     "rocm_smi_device_info",
     "Static device info",
@@ -157,37 +155,39 @@ softwareInfo = Gauge(
     ["driver_version", "rocm_smi_version", "rocm_smi_lib_version"],
 )
 
-# ========== Helpers ==========
+# ===== helpers =====
 _rx_number = re.compile(r"[-+]?\d+(?:\.\d+)?")
 
 
 def _is_na(v) -> bool:
     if v is None:
         return True
-    if isinstance(v, (int, float)):
-        return False
-    return str(v).strip().upper() == "N/A"
+    s = str(v).strip()
+    return s == "" or s.upper() == "N/A"
 
 
 def _to_float(v, *, scale=1.0):
-    """Достаёт первое число из строки/числа, применяет scale; для 'N/A' -> None."""
     if _is_na(v):
         return None
     if isinstance(v, (int, float)):
         return float(v) * scale
-    s = str(v)
-    m = _rx_number.search(s)
-    if not m:
-        return None
-    return float(m.group(0)) * scale
+    m = _rx_number.search(str(v))
+    return float(m.group(0)) * scale if m else None
 
 
 def _first_key(d: dict, keys: list[str]):
-    """Вернёт первое существующее имя ключа из списка."""
     for k in keys:
         if k in d:
             return k
     return None
+
+
+def _pick_label(d: dict, keys: list[str], default="unknown"):
+    """Первое НЕ 'N/A' и не пустое значение среди ключей."""
+    for k in keys:
+        if k in d and not _is_na(d[k]):
+            return str(d[k]).strip()
+    return default
 
 
 def _set_if_not_none(gauge: Gauge, labels: dict, value):
@@ -221,43 +221,16 @@ def getGPUMetrics():
     return metrics
 
 
-def getRocmVersion():
-    try:
-        # Запускаем rocm-smi с флагом -V (версия)
-        result = check_output(["rocm-smi", "-V"], universal_newlines=True)
-
-        # Парсим вывод
-        lines = result.strip().split("\n")
-        version_info = {}
-
-        for line in lines:
-            if "ROCM-SMI version:" in line:
-                version_info["rocm_smi_version"] = line.split(":")[-1].strip()
-            elif "ROCM-SMI-LIB version:" in line:
-                version_info["rocm_smi_lib_version"] = line.split(":")[
-                    -1
-                ].strip()
-
-        logger.info(f"[X] Retrieved ROCm version: {version_info}")
-        return version_info
-
-    except Exception as e:
-        logger.error(f"[!] Failed to get ROCm version: {e}")
-        return None
-
-
-# ========== Main ==========
+# ===== main =====
 if __name__ == "__main__":
     start_http_server(PORT_L)
     logger.info(f"[X] Started http server on port {PORT_L}...")
 
     rsmi_ver, rlib_ver = _get_versions()
-    driver_version = ""  # из блока 'system' ниже заполним при первом проходе
-    # Раз в 1 секунду обновляем метрики
+    driver_version = ""
     while True:
         data = getGPUMetrics()
 
-        # system — вне карточек
         if "system" in data and "Driver version" in data["system"]:
             driver_version = str(data["system"]["Driver version"]).strip()
             softwareInfo.labels(
@@ -270,25 +243,39 @@ if __name__ == "__main__":
             if card == "system":
                 continue
 
-            labels = {
-                "device_name": m.get("Device Name", "unknown"),
-                "device_id": m.get("Device ID", "unknown"),
-                "subsystem_id": m.get("Subsystem ID", "unknown"),
-            }
+            # >>> robust labels (правит device_name="N/A")
+            dev_name = _pick_label(
+                m,
+                [
+                    "Device Name",
+                    "Card Series",
+                    "Card Model",
+                    "GFX Version",
+                    "Card SKU",
+                ],
+            )
+            dev_id = _pick_label(m, ["Device ID", "Card Model", "PCI Bus"])
+            sub_id = _pick_label(m, ["Subsystem ID", "PCI Bus"])
 
-            # Static info (1 раз можно, но set() идемпотентен)
+            labels = {
+                "device_name": dev_name,
+                "device_id": dev_id,
+                "subsystem_id": sub_id,
+            }
+            logger.debug(f"labels for {card}: {labels}")
+
+            # Static info
             deviceInfo.labels(
-                device_name=labels["device_name"],
-                device_id=labels["device_id"],
-                subsystem_id=labels["subsystem_id"],
-                vbios=m.get("VBIOS version", ""),
-                gfx_version=m.get("GFX Version", "")
-                or m.get("GFX version", ""),
-                card_series=m.get("Card Series", ""),
-                card_vendor=m.get("Card Vendor", ""),
+                device_name=dev_name,
+                device_id=dev_id,
+                subsystem_id=sub_id,
+                vbios=_pick_label(m, ["VBIOS version"]),
+                gfx_version=_pick_label(m, ["GFX Version", "GFX version"]),
+                card_series=_pick_label(m, ["Card Series", "Device Name"]),
+                card_vendor=_pick_label(m, ["Card Vendor"]),
             ).set(1)
 
-            # Temperatures (edge/junction/memory): поддерживаем старые и новые ключи
+            # Temps
             _set_if_not_none(
                 gpuEdgeTemperature,
                 labels,
@@ -336,16 +323,22 @@ if __name__ == "__main__":
             )
 
             # Usage
-            usage = _to_float(
-                m.get(
-                    _first_key(m, ["GPU use (%)", "average_gfx_activity (%)"])
-                )
+            _set_if_not_none(
+                gpuUsage,
+                labels,
+                _to_float(
+                    m.get(
+                        _first_key(
+                            m, ["GPU use (%)", "average_gfx_activity (%)"]
+                        )
+                    )
+                ),
             )
-            _set_if_not_none(gpuUsage, labels, usage)
-
-            vram = _to_float(m.get("GPU Memory Allocated (VRAM%)"))
-            _set_if_not_none(gpuVRAMUsage, labels, vram)
-
+            _set_if_not_none(
+                gpuVRAMUsage,
+                labels,
+                _to_float(m.get("GPU Memory Allocated (VRAM%)")),
+            )
             _set_if_not_none(
                 umcActivity,
                 labels,
@@ -355,7 +348,7 @@ if __name__ == "__main__":
                 mmActivity, labels, _to_float(m.get("average_mm_activity (%)"))
             )
 
-            # Power (разные имена в разных версиях)
+            # Power
             now_power_key = _first_key(
                 m,
                 [
@@ -363,14 +356,9 @@ if __name__ == "__main__":
                     "current_socket_power (W)",
                 ],
             )
-            avg_sock_key = _first_key(
-                m, ["average_socket_power (W)"]
-            )  # новое имя
-            avg_pkg_key = _first_key(
-                m, ["Average Graphics Package Power (W)"]
-            )  # старое имя
+            avg_sock_key = _first_key(m, ["average_socket_power (W)"])
+            avg_pkg_key = _first_key(m, ["Average Graphics Package Power (W)"])
             max_pkg_key = _first_key(m, ["Max Graphics Package Power (W)"])
-
             _set_if_not_none(
                 socketPowerNow, labels, _to_float(m.get(now_power_key))
             )
@@ -400,7 +388,7 @@ if __name__ == "__main__":
                 fanRpm, labels, _to_float(m.get("current_fan_speed (rpm)"))
             )
 
-            # Clocks (current)
+            # Clocks
             for key, cname in [
                 ("current_gfxclk (MHz)", "gfxclk"),
                 ("current_socclk (MHz)", "socclk"),
@@ -412,7 +400,6 @@ if __name__ == "__main__":
                 if val is not None:
                     clkCurrentMHz.labels(**labels, clock=cname).set(val)
 
-            # Clocks (average)
             for key, cname in [
                 ("average_gfxclk_frequency (MHz)", "gfxclk"),
                 ("average_socclk_frequency (MHz)", "socclk"),
@@ -424,7 +411,7 @@ if __name__ == "__main__":
                 if val is not None:
                     clkAverageMHz.labels(**labels, clock=cname).set(val)
 
-            # PCIe: width lanes и speed (в JSON — «0.1 GT/s», т.е. 80 => 8.0 GT/s)
+            # PCIe
             width = _to_float(m.get("pcie_link_width (Lanes)"))
             if width is not None:
                 pcieWidthLanes.labels(**labels).set(width)
@@ -432,7 +419,7 @@ if __name__ == "__main__":
             if speed_01 is not None:
                 pcieSpeedGTs.labels(**labels).set(speed_01 * 0.1)
 
-            # Энергия
+            # Energy
             _set_if_not_none(
                 energyAccumulatorUJ,
                 labels,
