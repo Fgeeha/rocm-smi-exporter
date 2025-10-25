@@ -223,7 +223,7 @@ def getGPUMetrics():
 
 # ===== main =====
 if __name__ == "__main__":
-    start_http_server(PORT_L)
+    start_http_server(port=PORT_L, addr="127.0.0.1")
     logger.info(f"[X] Started http server on port {PORT_L}...")
 
     rsmi_ver, rlib_ver = _get_versions()
