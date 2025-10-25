@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import json
 import logging
 import re
@@ -11,8 +12,6 @@ from prometheus_client import (
     PROCESS_COLLECTOR,
     PLATFORM_COLLECTOR,
 )
-
-PORT_L = 9101
 
 logger = logging.getLogger("rocm_smi_exporter")
 handler = logging.StreamHandler()
@@ -223,8 +222,21 @@ def getGPUMetrics():
 
 # ===== main =====
 if __name__ == "__main__":
-    start_http_server(port=PORT_L, addr="127.0.0.1")
-    logger.info(f"[X] Started http server on port {PORT_L}...")
+    parser = argparse.ArgumentParser(description="ROCm SMI Exporter")
+    parser.add_argument(
+        "--addr",
+        default="0.0.0.0",
+        help="Address to bind the HTTP server (default: 0.0.0.0)",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=9101,
+        help="Port to bind the HTTP server (default: 9101)",
+    )
+    args = parser.parse_args()
+    start_http_server(port=args.port, addr=args.addr)
+    logger.info(f"[X] Started http server on port {args.addr}:{args.port}...")
 
     rsmi_ver, rlib_ver = _get_versions()
     driver_version = ""
