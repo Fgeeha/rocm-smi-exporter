@@ -200,59 +200,101 @@
       "id": 1,
       "gridPos": { "x": 0, "y": 10, "w": 12, "h": 6 },
       "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-      "pluginVersion": "10.0.0",
       "targets": [
-        { "expr": "rocm_smi_software_info", "legendFormat": "{{driver_version}} / {{rocm_smi_version}} / {{rocm_smi_lib_version}}", "refId": "A" }
+        {
+          "expr": "sum by (rocm_smi_version, rocm_smi_lib_version) (rocm_smi_software_info)",
+          "refId": "A",
+          "instant": true
+        }
       ],
-      "options": { "showHeader": true, "frameIndex": 0 },
       "transformations": [
+        { "id": "labelsToFields", "options": {} },
         {
           "id": "organize",
           "options": {
             "excludeByName": { "Time": true, "Value": true },
             "renameByName": {
-              "driver_version": "Driver",
               "rocm_smi_version": "rocm-smi",
               "rocm_smi_lib_version": "rocm-smi-lib"
-            }
-          }
-        }
-      ],
-      "fieldConfig": { "defaults": { "custom": { "align": "auto" } }, "overrides": [] }
-    },
-    {
-      "type": "table",
-      "title": "Device Info",
-      "id": 2,
-      "gridPos": { "x": 12, "y": 10, "w": 12, "h": 6 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-      "targets": [
-        {
-          "expr": "rocm_smi_device_info{job=~\"$job\",instance=~\"$instance\",device_name=~\"$device_name\",device_id=~\"$device_id\",subsystem_id=~\"$subsystem_id\"}",
-          "refId": "A"
-        }
-      ],
-      "transformations": [
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": { "Time": true, "Value": true },
-            "renameByName": {
-              "device_name": "Device Name",
-              "device_id": "Device ID",
-              "subsystem_id": "Subsystem ID",
-              "vbios": "VBIOS",
-              "gfx_version": "GFX",
-              "card_series": "Series",
-              "card_vendor": "Vendor",
-              "job": "job",
-              "instance": "instance"
+            },
+            "indexByName": {
+              "rocm_smi_lib_version": 0,
+              "rocm_smi_version": 1
             }
           }
         }
       ],
       "options": { "showHeader": true },
       "fieldConfig": { "defaults": { "custom": { "align": "auto" } }, "overrides": [] }
+    },
+    {
+      "type": "table",
+      "title": "Device Info",
+      "id": 2,
+      "gridPos": { "x": 12, "y": 10, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "sum by (device_name, device_id, subsystem_id, vbios, gfx_version, card_series, card_vendor) (rocm_smi_device_info{job=~\"$job\", instance=~\"$instance\"})",
+          "refId": "A",
+          "instant": true
+        }
+      ],
+      "transformations": [
+        { "id": "labelsToFields", "options": {} },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": { "Time": true, "Value": true, "__name__": true, "job": true, "instance": true, "role": true, "vendor": true },
+            "renameByName": {
+              "device_name": "Device Name",
+              "card_series": "Series",
+              "gfx_version": "GFX",
+              "vbios": "VBIOS",
+              "card_vendor": "Vendor",
+              "device_id": "Device ID",
+              "subsystem_id": "Subsystem ID"
+            },
+            "indexByName": {
+              "Device Name": 0,
+              "Series": 1,
+              "GFX": 2,
+              "VBIOS": 3,
+              "Vendor": 4,
+              "Device ID": 5,
+              "Subsystem ID": 6
+            }
+          }
+        },
+        { "id": "transpose", "options": {} },
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": { "Field": "Property", "row 0": "Value" },
+            "indexByName": { "Property": 0, "Value": 1 }
+          }
+        }
+      ],
+      "options": { "showHeader": true, "footer": { "show": false } },
+      "fieldConfig": {
+        "defaults": { "custom": { "align": "left" } },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Property" },
+            "properties": [
+              { "id": "custom.width", "value": 220 },
+              { "id": "custom.align", "value": "left" }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Value" },
+            "properties": [
+              { "id": "custom.width", "value": 600 },
+              { "id": "custom.align", "value": "left" }
+            ]
+          }
+        ]
+      }
     },
 
     {
